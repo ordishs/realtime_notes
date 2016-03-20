@@ -19,6 +19,8 @@ In your browser, goto [webapp](http://localhost:8000/)
 
 I have included local versions of js, css and fonts so this can be run locally.
 
+You can find a working demo [here](http://ordishs.dyndns.org:8000)
+
 ### Server
 
 The server application is using Express and Socket.io.  It listens on all local interfaces on port 8000.
@@ -35,3 +37,5 @@ It also emits 'note' messages each time a note is changed in RethinkDB.
 ### Client
 
 The client is based on the example in Gianluca Tiepolo's excellent book [Getting Started with RethinkDB](https://www.packtpub.com/big-data-and-business-intelligence/getting-started-rethinkdb), although all ajax() calls have been replaced by socket messages.
+
+You can add new notes by clicking the + sign in the centre of the screen and notes can be dragged around the screen.  Delete by clicking on the trash can icon.
