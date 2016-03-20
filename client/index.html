@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <meta charset="utf-8" />
+  <title>Real-time Notes</title>
+  <!-- <link  href="http://fonts.googleapis.com/css?family=Reenie+Beanie:regular" rel="stylesheet" type="text/css"> -->
+  <link href="/css/magnific-popup.css" rel="stylesheet">
+  <link href="/css/font-awesome.min.css" rel="stylesheet">
+  <link href="/css/notes.css" rel="stylesheet">
+
+  <script src="/js/jquery-1.11.0.min.js"></script>
+  <script src="/js/jquery-ui.min.js"></script>
+  <script src="/js/jquery.magnific-popup.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+
+</head>
+<body>
+  <ul id="notes-ul"></ul>
+  <a id="addicon" href="#test-form"><i class="fa fa-plus-square fa-5x popup-with-form"></i></a>
+  <form id="test-form" class="mfp-hide white-popup-block white-popup" method="post" action="create">
+  	<h1>Create Note</h1>
+    <textarea id="note_t" name="note_text" placeholder="Write some text..." id="textarea"></textarea>
+    <button id="submit_btn" type="submit">Create</button>
+  </form>
+  <script src="notes.js"></script>
+</body>
+</html>
