@@ -15,6 +15,8 @@ and then
 node server
 ```
 
+In your browser, goto [webapp](http://localhost:8000/)
+
 I have included local versions of js, css and fonts so this can be run locally.
 
 ### Server
