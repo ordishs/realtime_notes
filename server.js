@@ -21,11 +21,11 @@ function log (err, message, obj) {
   }
 }
 
-// Ensure the notes table exists:
+// Ensure the realtime_notes table exists:
 r.connect().then(function (conn) {
-  r.tableCreate('notes').run(conn, function () {
+  r.tableCreate('realtime_notes').run(conn, function () {
     // Ignore the error
-    log(null, 'Notes table created.')
+    log(null, 'realtime_notes table created.')
   })
 }).error(function (err) {
   log(err)
@@ -39,7 +39,7 @@ server.listen(8000, function () {
 
     socket.on('add', function (note) {
       r.connect().then(function (conn) {
-        r.table('notes').insert(note).run(conn, function (err, result) {
+        r.table('realtime_notes').insert(note).run(conn, function (err, result) {
           log(err, 'Inserted', note)
         })
       }).error(function (err) {
@@ -49,7 +49,7 @@ server.listen(8000, function () {
 
     socket.on('move', function (note) {
       r.connect().then(function (conn) {
-        r.table('notes').get(note.id).update(note).run(conn, function (err, result) {
+        r.table('realtime_notes').get(note.id).update(note).run(conn, function (err, result) {
           log(err, 'Updated', note)
         })
       }).error(function (err) {
@@ -59,7 +59,7 @@ server.listen(8000, function () {
 
     socket.on('delete', function (note) {
       r.connect().then(function (conn) {
-        r.table('notes').get(note.id).delete().run(conn, function (err, cursor) {
+        r.table('realtime_notes').get(note.id).delete().run(conn, function (err, cursor) {
           log(err, 'Deleted', note)
         })
       }).error(function (err) {
@@ -72,7 +72,7 @@ server.listen(8000, function () {
     })
 
     r.connect().then(function (conn) {
-      r.table('notes').changes({includeInitial: true}).run(conn, function (err, cursor) {
+      r.table('realtime_notes').changes({includeInitial: true}).run(conn, function (err, cursor) {
         if (err) {
           log(err)
         }

@@ -1,12 +1,12 @@
 {
-  "name": "realtimenotes",
+  "name": "realtime_notes",
   "version": "1.0.0",
   "description": "Real-time Notes",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Masagi Limited (inspired from )",
+  "author": "Masagi Limited",
   "license": "ISC",
   "dependencies": {
     "express": "^4.13.4",
