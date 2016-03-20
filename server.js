@@ -26,67 +26,67 @@ r.connect().then(function (conn) {
   r.tableCreate('realtime_notes').run(conn, function () {
     // Ignore the error
     log(null, 'realtime_notes table created.')
+
+    server.listen(8000, function () {
+      log(null, 'Server up and listening on port 8000')
+
+      io.on('connect', function (socket) {
+        log(null, 'Someone connected.')
+
+        socket.on('add', function (note) {
+          r.connect().then(function (conn) {
+            r.table('realtime_notes').insert(note).run(conn, function (err, result) {
+              log(err, 'Inserted', note)
+            })
+          }).error(function (err) {
+            log(err)
+          })
+        })
+
+        socket.on('move', function (note) {
+          r.connect().then(function (conn) {
+            r.table('realtime_notes').get(note.id).update(note).run(conn, function (err, result) {
+              log(err, 'Updated', note)
+            })
+          }).error(function (err) {
+            log(err)
+          })
+        })
+
+        socket.on('delete', function (note) {
+          r.connect().then(function (conn) {
+            r.table('realtime_notes').get(note.id).delete().run(conn, function (err, cursor) {
+              log(err, 'Deleted', note)
+            })
+          }).error(function (err) {
+            log(err)
+          })
+        })
+
+        socket.on('disconnect', function () {
+          log(null, 'Someone disconnected.')
+        })
+
+        r.connect().then(function (conn) {
+          r.table('realtime_notes').changes({includeInitial: true}).run(conn, function (err, cursor) {
+            if (err) {
+              log(err)
+            }
+
+            cursor.each(function (err, note) {
+              log(err)
+
+              if (!note.new_val) {
+                socket.emit('delete', note.old_val.id)
+              } else {
+                socket.emit('note', note.new_val)
+              }
+            })
+          })
+        })
+      })
+    })
   })
 }).error(function (err) {
   log(err)
-})
-
-server.listen(8000, function () {
-  log(null, 'Server up and listening on port 8000')
-
-  io.on('connect', function (socket) {
-    log(null, 'Someone connected.')
-
-    socket.on('add', function (note) {
-      r.connect().then(function (conn) {
-        r.table('realtime_notes').insert(note).run(conn, function (err, result) {
-          log(err, 'Inserted', note)
-        })
-      }).error(function (err) {
-        log(err)
-      })
-    })
-
-    socket.on('move', function (note) {
-      r.connect().then(function (conn) {
-        r.table('realtime_notes').get(note.id).update(note).run(conn, function (err, result) {
-          log(err, 'Updated', note)
-        })
-      }).error(function (err) {
-        log(err)
-      })
-    })
-
-    socket.on('delete', function (note) {
-      r.connect().then(function (conn) {
-        r.table('realtime_notes').get(note.id).delete().run(conn, function (err, cursor) {
-          log(err, 'Deleted', note)
-        })
-      }).error(function (err) {
-        log(err)
-      })
-    })
-
-    socket.on('disconnect', function () {
-      log(null, 'Someone disconnected.')
-    })
-
-    r.connect().then(function (conn) {
-      r.table('realtime_notes').changes({includeInitial: true}).run(conn, function (err, cursor) {
-        if (err) {
-          log(err)
-        }
-
-        cursor.each(function (err, note) {
-          log(err)
-
-          if (!note.new_val) {
-            socket.emit('delete', note.old_val.id)
-          } else {
-            socket.emit('note', note.new_val)
-          }
-        })
-      })
-    })
-  })
 })
