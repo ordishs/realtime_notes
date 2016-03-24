@@ -21,6 +21,10 @@ function log (err, message, obj) {
   }
 }
 
+function clean(str) {
+  return str.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+}
+
 // Ensure the realtime_notes table exists:
 r.connect().then(function (conn) {
   r.tableCreate('realtime_notes').run(conn, function () {
@@ -77,13 +81,11 @@ r.connect().then(function (conn) {
               log(err)
 
               if (!note.new_val) {
-                note.old_val.id = note.old_val.id.replace(/</g, '&lt;').replace(/>/g, '&gt;')
-                note.old_val.message = note.old_val.message.replace(/</g, '&lt;').replace(/>/g, '&gt;')
-		            socket.emit('delete', note.old_val.id)
+                socket.emit('delete', clean(note.old_val.id))
               } else {
-                note.new_val.id = note.new_val.id.replace(/</g, '&lt;').replace(/>/g, '&gt;')
-                note.new_val.message = note.new_val.message.replace(/</g, '&lt;').replace(/>/g, '&gt;')
-		            socket.emit('note', note.new_val)
+                note.new_val.id = clean(note.new_val.id)
+                note.new_val.message = clean(note.new_val.message)
+                socket.emit('note', note.new_val)
               }
             })
           })
