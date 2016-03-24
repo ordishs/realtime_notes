@@ -94,8 +94,6 @@ r.connect().then(function (conn) {
                 socket.emit('note', note.new_val)
               }
             })
-          }).finally(function () {
-            conn.close()
           })
         })
       })
