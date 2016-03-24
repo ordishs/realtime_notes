@@ -27,7 +27,7 @@ r.connect().then(function (conn) {
     // Ignore the error
     log(null, 'realtime_notes table created.')
 
-    server.listen(8000, function () {
+    server.listen(8000, '0.0.0.0', function () {
       log(null, 'Server up and listening on port 8000')
 
       io.on('connect', function (socket) {
@@ -77,9 +77,13 @@ r.connect().then(function (conn) {
               log(err)
 
               if (!note.new_val) {
-                socket.emit('delete', note.old_val.id)
+                note.old_val.id = note.old_val.id.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                note.old_val.message = note.old_val.message.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+		            socket.emit('delete', note.old_val.id)
               } else {
-                socket.emit('note', note.new_val)
+                note.new_val.id = note.new_val.id.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                note.new_val.message = note.new_val.message.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+		            socket.emit('note', note.new_val)
               }
             })
           })
