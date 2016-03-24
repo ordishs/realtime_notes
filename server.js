@@ -21,7 +21,7 @@ function log (err, message, obj) {
   }
 }
 
-function clean(str) {
+function clean (str) {
   return str.replace(/</g, '&lt;').replace(/>/g, '&gt;')
 }
 
@@ -41,6 +41,8 @@ r.connect().then(function (conn) {
           r.connect().then(function (conn) {
             r.table('realtime_notes').insert(note).run(conn, function (err, result) {
               log(err, 'Inserted', note)
+            }).finally(function () {
+              conn.close()
             })
           }).error(function (err) {
             log(err)
@@ -51,6 +53,8 @@ r.connect().then(function (conn) {
           r.connect().then(function (conn) {
             r.table('realtime_notes').get(note.id).update(note).run(conn, function (err, result) {
               log(err, 'Updated', note)
+            }).finally(function () {
+              conn.close()
             })
           }).error(function (err) {
             log(err)
@@ -61,6 +65,8 @@ r.connect().then(function (conn) {
           r.connect().then(function (conn) {
             r.table('realtime_notes').get(note.id).delete().run(conn, function (err, cursor) {
               log(err, 'Deleted', note)
+            }).finally(function () {
+              conn.close()
             })
           }).error(function (err) {
             log(err)
@@ -88,6 +94,8 @@ r.connect().then(function (conn) {
                 socket.emit('note', note.new_val)
               }
             })
+          }).finally(function () {
+            conn.close()
           })
         })
       })
