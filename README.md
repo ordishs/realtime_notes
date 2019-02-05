@@ -19,7 +19,7 @@ In your browser, goto [webapp](http://localhost:8000/)
 
 I have included local versions of js, css and fonts so this can be run locally.
 
-Here is a [working demo](http://ordishs.dyndns.org:8000)
+Here is a [working demo](http://seed1.hashzilla.io:8000)
 
 ### Server
 
